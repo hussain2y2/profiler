@@ -1,0 +1,42 @@
+{
+    "name": "isotopes/profiler",
+    "description": "Profiler is a replica of Laravel Telescope modified for MongoDB.",
+    "keywords": ["laravel", "monitoring", "debugging", "profiler"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hussain Ahmad",
+            "email": "engrhussainahmad@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "ext-json": "*",
+        "jenssegers/mongodb": "^3.6",
+        "laravel/framework": "^5.8",
+        "league/flysystem": "^1.0",
+        "moontoast/math": "^1.2",
+        "symfony/var-dumper": "^4.2"
+    },
+    "require-dev": {
+        "ext-gd": "*",
+        "orchestra/testbench": "^3.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "Isotopes\\Profiler\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Isotopes\\Profiler\\ProfilerServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
