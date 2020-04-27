@@ -149,10 +149,10 @@ class IncomingEntry
     /**
      * Merge tags into the entry's existing tags.
      *
-     * @param array $tags
+     * @param $tags
      * @return $this
      */
-    public function tags(array $tags): self
+    public function tags($tags): self
     {
         $this->tags = array_unique(array_merge($this->tags, $tags));
 
