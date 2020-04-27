@@ -53,7 +53,7 @@ class MailWatcher extends Watcher
      * @param MessageSent $event
      * @return string
      */
-    protected function getMailable($event): string
+    protected function getMailable($event)
     {
         if (isset($event->data['__laravel_notification'])) {
             return $event->data['__laravel_notification'];
@@ -68,7 +68,7 @@ class MailWatcher extends Watcher
      * @param MessageSent $event
      * @return bool
      */
-    protected function getQueuedStatus($event): bool
+    protected function getQueuedStatus($event)
     {
         if (isset($event->data['__laravel_notification_queued'])) {
             return $event->data['__laravel_notification_queued'];
@@ -82,7 +82,6 @@ class MailWatcher extends Watcher
      *
      * @param  Swift_Message  $message
      * @param  array  $data
-     * @return array
      */
     private function tags($message, $data)
     {
