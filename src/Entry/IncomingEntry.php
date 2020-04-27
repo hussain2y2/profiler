@@ -82,7 +82,7 @@ class IncomingEntry
      * @param mixed ...$arguments
      * @return IncomingEntry
      */
-    public static function make(...$arguments): IncomingEntry
+    public static function make(...$arguments)
     {
         return new static(...$arguments);
     }
@@ -93,7 +93,7 @@ class IncomingEntry
      * @param string $batchId
      * @return $this
      */
-    public function batchId(string $batchId): IncomingEntry
+    public function batchId(string $batchId)
     {
         $this->batchId = $batchId;
         return $this;
@@ -105,7 +105,7 @@ class IncomingEntry
      * @param string $type
      * @return $this
      */
-    public function type(string $type): IncomingEntry
+    public function type(string $type)
     {
         $this->type = $type;
         return $this;
@@ -117,7 +117,7 @@ class IncomingEntry
      * @param string $familyHash
      * @return $this
      */
-    public function withFamilyHash(string $familyHash): IncomingEntry
+    public function withFamilyHash(string $familyHash)
     {
         $this->familyHash = $familyHash;
         return $this;
@@ -129,7 +129,7 @@ class IncomingEntry
      * @param Authenticatable $user
      * @return $this
      */
-    public function user(Authenticatable $user): self
+    public function user($user)
     {
         $this->user = $user;
 
@@ -152,7 +152,7 @@ class IncomingEntry
      * @param $tags
      * @return $this
      */
-    public function tags($tags): self
+    public function tags(array $tags)
     {
         $this->tags = array_unique(array_merge($this->tags, $tags));
 
@@ -164,7 +164,7 @@ class IncomingEntry
      *
      * @return bool
      */
-    public function hasMonitoredTag(): bool
+    public function hasMonitoredTag()
     {
         if (!empty($this->tags)) {
             return app(EntriesRepository::class)->isMonitoring($this->tags);
@@ -178,7 +178,7 @@ class IncomingEntry
      *
      * @return bool
      */
-    public function isFailedRequest(): bool
+    public function isFailedRequest()
     {
         return $this->type === EntryType::REQUEST && ($this->content['response_status'] ?? 200) >= 500;
     }
@@ -188,7 +188,7 @@ class IncomingEntry
      *
      * @return bool
      */
-    public function isFailedJob(): bool
+    public function isFailedJob()
     {
         return $this->type === EntryType::JOB && ($this->content['status'] ?? null) === 'failed';
     }
@@ -198,7 +198,7 @@ class IncomingEntry
      *
      * @return bool
      */
-    public function isReportableException(): bool
+    public function isReportableException()
     {
         return false;
     }
@@ -208,7 +208,7 @@ class IncomingEntry
      *
      * @return bool
      */
-    public function isException(): bool
+    public function isException()
     {
         return false;
     }
@@ -218,7 +218,7 @@ class IncomingEntry
      *
      * @return bool
      */
-    public function isDump(): bool
+    public function isDump()
     {
         return false;
     }
@@ -228,7 +228,7 @@ class IncomingEntry
      *
      * @return bool
      */
-    public function isScheduledTask(): bool
+    public function isScheduledTask()
     {
         return $this->type === EntryType::SCHEDULED_TASK;
     }
@@ -238,7 +238,7 @@ class IncomingEntry
      *
      * @return string|null
      */
-    public function familyHash(): ?string
+    public function familyHash()
     {
         return $this->familyHash;
     }
@@ -248,7 +248,7 @@ class IncomingEntry
      *
      * @return array
      */
-    public function toArray(): array
+    public function toArray()
     {
         return [
             'uuid'          => $this->uuid,

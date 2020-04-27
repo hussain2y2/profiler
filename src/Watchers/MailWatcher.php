@@ -16,7 +16,7 @@ class MailWatcher extends Watcher
      * @param  Application  $app
      * @return void
      */
-    public function register($app): void
+    public function register($app)
     {
         $app['events']->listen(MessageSent::class, [$this, 'recordMail']);
     }
@@ -27,7 +27,7 @@ class MailWatcher extends Watcher
      * @param MessageSent $event
      * @return void
      */
-    public function recordMail(MessageSent $event): void
+    public function recordMail(MessageSent $event)
     {
         if (! Profiler::isRecording()) {
             return;
@@ -85,12 +85,11 @@ class MailWatcher extends Watcher
      */
     private function tags($message, $data)
     {
-        $profiler = (array) $data['__profiler'];
         return array_merge(
             array_keys($message->getTo() ?: []),
             array_keys($message->getCc() ?: []),
             array_keys($message->getBcc() ?: []),
-            $profiler ?? []
+            $data['__profiler'] ?? []
         );
     }
 }
