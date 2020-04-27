@@ -84,9 +84,9 @@ class MailWatcher extends Watcher
      * @param  array  $data
      * @return array
      */
-    private function tags($message, $data): array
+    private function tags($message, $data)
     {
-        $profiler = (array) $data['__profiler'];
+        $profiler = $data['__profiler'];
         return array_merge(
             array_keys($message->getTo() ?: []),
             array_keys($message->getCc() ?: []),
