@@ -65,7 +65,7 @@ class ExceptionWatcher extends Watcher
      */
     protected function tags($event)
     {
-        return array_merge(ExtractTags::from($event->context['exception'])->toArray(),
+        return array_merge(ExtractTags::from($event->context['exception']),
             $event->context['profiler'] ?? []
         );
     }
