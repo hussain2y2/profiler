@@ -154,7 +154,7 @@ class IncomingEntry
      */
     public function tags($tags): self
     {
-        $this->tags = array_unique(array_merge($this->tags, $tags));
+        $this->tags = array_unique(array_merge($this->tags, (array) $tags));
 
         return $this;
     }
