@@ -17,7 +17,7 @@ class LogWatcher extends Watcher
      * @param  Application  $app
      * @return void
      */
-    public function register($app): void
+    public function register($app)
     {
         $app['events']->listen(MessageLogged::class, [$this, 'recordLog']);
     }
@@ -28,7 +28,7 @@ class LogWatcher extends Watcher
      * @param MessageLogged $event
      * @return void
      */
-    public function recordLog(MessageLogged $event): void
+    public function recordLog(MessageLogged $event)
     {
         if (! Profiler::isRecording() || $this->shouldIgnore($event)) {
             return;
@@ -49,7 +49,7 @@ class LogWatcher extends Watcher
      * @param MessageLogged $event
      * @return array
      */
-    private function tags($event): array
+    private function tags($event)
     {
         return $event->context['profiler'] ?? [];
     }
@@ -60,7 +60,7 @@ class LogWatcher extends Watcher
      * @param  mixed  $event
      * @return bool
      */
-    private function shouldIgnore($event): bool
+    private function shouldIgnore($event)
     {
         return isset($event->context['exception']) && $event->context['exception'] instanceof Exception;
     }

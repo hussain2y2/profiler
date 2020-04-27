@@ -11,7 +11,7 @@ trait FetchesStackTrace
      *
      * @return array
      */
-    protected function getCallerFromStackTrace(): array
+    protected function getCallerFromStackTrace()
     {
         $trace = collect(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS))->forget(0);
 
@@ -31,7 +31,7 @@ trait FetchesStackTrace
      *
      * @return string|null
      */
-    protected function ignoredVendorPath(): ?string
+    protected function ignoredVendorPath()
     {
         if (! ($this->options['ignore_packages'] ?? true)) {
             return 'laravel';

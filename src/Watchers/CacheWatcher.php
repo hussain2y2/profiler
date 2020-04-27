@@ -19,7 +19,7 @@ class CacheWatcher extends Watcher
      * @param  Application  $app
      * @return void
      */
-    public function register($app): void
+    public function register($app)
     {
         $app['events']->listen(CacheHit::class, [$this, 'recordCacheHit']);
         $app['events']->listen(CacheMissed::class, [$this, 'recordCacheMissed']);
@@ -34,7 +34,7 @@ class CacheWatcher extends Watcher
      * @param CacheHit $event
      * @return void
      */
-    public function recordCacheHit(CacheHit $event): void
+    public function recordCacheHit(CacheHit $event)
     {
         if (! Profiler::isRecording() || $this->shouldIgnore($event)) {
             return;
@@ -53,7 +53,7 @@ class CacheWatcher extends Watcher
      * @param CacheMissed $event
      * @return void
      */
-    public function recordCacheMissed(CacheMissed $event): void
+    public function recordCacheMissed(CacheMissed $event)
     {
         if (! Profiler::isRecording() || $this->shouldIgnore($event)) {
             return;
@@ -71,7 +71,7 @@ class CacheWatcher extends Watcher
      * @param KeyWritten $event
      * @return void
      */
-    public function recordKeyWritten(KeyWritten $event): void
+    public function recordKeyWritten(KeyWritten $event)
     {
         if (! Profiler::isRecording() || $this->shouldIgnore($event)) {
             return;
@@ -91,7 +91,7 @@ class CacheWatcher extends Watcher
      * @param KeyForgotten $event
      * @return void
      */
-    public function recordKeyForgotten(KeyForgotten $event): void
+    public function recordKeyForgotten(KeyForgotten $event)
     {
         if (! Profiler::isRecording() || $this->shouldIgnore($event)) {
             return;
@@ -119,7 +119,7 @@ class CacheWatcher extends Watcher
      * @param  mixed  $event
      * @return bool
      */
-    private function shouldIgnore($event): bool
+    private function shouldIgnore($event)
     {
         return Str::is([
             'illuminate:queue:restart',

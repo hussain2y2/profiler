@@ -16,7 +16,7 @@ trait FormatsClosure
      *
      * @throws ReflectionException
      */
-    protected function formatClosureListener(Closure $listener): string
+    protected function formatClosureListener(Closure $listener)
     {
         $listener = new ReflectionFunction($listener);
 

@@ -18,7 +18,7 @@ class ScheduleWatcher extends Watcher
      * @param  Application  $app
      * @return void
      */
-    public function register($app): void
+    public function register($app)
     {
         $app['events']->listen(CommandStarting::class, [$this, 'recordCommand']);
     }
@@ -26,10 +26,10 @@ class ScheduleWatcher extends Watcher
     /**
      * Record a scheduled command was executed.
      *
-     * @param  \Illuminate\Console\Events\CommandStarting  $event
+     * @param CommandStarting $event
      * @return void
      */
-    public function recordCommand(CommandStarting $event): void
+    public function recordCommand(CommandStarting $event)
     {
         if (($event->command !== 'schedule:run' && $event->command !== 'schedule:finish') || ! Profiler::isRecording()) {
             return;

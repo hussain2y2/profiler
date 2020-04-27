@@ -22,7 +22,7 @@ class ViewWatcher extends Watcher
      * @param  Application  $app
      * @return void
      */
-    public function register($app): void
+    public function register($app)
     {
         $app['events']->listen($this->options['events'] ?? 'composing:*', [$this, 'recordAction']);
     }
@@ -34,7 +34,7 @@ class ViewWatcher extends Watcher
      * @param  array  $data
      * @return void
      */
-    public function recordAction($event, $data): void
+    public function recordAction($event, $data)
     {
         if (! Profiler::isRecording()) {
             return;
@@ -57,7 +57,7 @@ class ViewWatcher extends Watcher
      * @param View $view
      * @return string
      */
-    protected function extractPath($view): string
+    protected function extractPath($view)
     {
         $path = $view->getPath();
 
@@ -87,7 +87,7 @@ class ViewWatcher extends Watcher
      * @param View $view
      * @return array
      */
-    protected function formatComposers($view): array
+    protected function formatComposers($view)
     {
         $name = $view->getName();
 
@@ -111,12 +111,12 @@ class ViewWatcher extends Watcher
      * @param  string $eventName
      * @return Collection
      */
-    protected function getComposersForEvent($eventName): Collection
+    protected function getComposersForEvent($eventName)
     {
         return collect(app('events')->getListeners($eventName))
-            ->map(function ($listener) {
+            ->map(static function ($listener) {
                 return (new ReflectionFunction($listener))->getStaticVariables();
-            })->reject(function ($variables) {
+            })->reject(static function ($variables) {
                 if (is_array($variables['listener'])) {
                     return Str::contains(get_class($variables['listener'][0]), 'Laravel\\Profiler');
                 }

@@ -24,7 +24,7 @@ class RequestWatcher extends Watcher
      * @param  Application  $app
      * @return void
      */
-    public function register($app): void
+    public function register($app)
     {
         $app['events']->listen(RequestHandled::class, [$this, 'recordRequest']);
     }
@@ -35,7 +35,7 @@ class RequestWatcher extends Watcher
      * @param RequestHandled $event
      * @return void
      */
-    public function recordRequest(RequestHandled $event): void
+    public function recordRequest(RequestHandled $event)
     {
         if (! Profiler::isRecording()) {
             return;
@@ -64,7 +64,7 @@ class RequestWatcher extends Watcher
      * @param  array  $headers
      * @return array
      */
-    protected function headers($headers): array
+    protected function headers($headers)
     {
         $headers = collect($headers)->map(function ($header) {
             return $header[0];
@@ -81,7 +81,7 @@ class RequestWatcher extends Watcher
      * @param  array  $payload
      * @return array
      */
-    protected function payload($payload): array
+    protected function payload($payload)
     {
         return $this->hideParameters($payload,
             Profiler::$hiddenRequestParameters
@@ -112,7 +112,7 @@ class RequestWatcher extends Watcher
      * @param Request $request
      * @return array
      */
-    private function sessionVariables(Request $request): array
+    private function sessionVariables(Request $request)
     {
         return $request->hasSession() ? $request->session()->all() : [];
     }
@@ -123,7 +123,7 @@ class RequestWatcher extends Watcher
      * @param Request $request
      * @return array
      */
-    private function input(Request $request): array
+    private function input(Request $request)
     {
         $files = $request->files->all();
 
@@ -180,7 +180,7 @@ class RequestWatcher extends Watcher
      * @param  string  $content
      * @return bool
      */
-    public function contentWithinLimits($content): bool
+    public function contentWithinLimits($content)
     {
         $limit = $this->options['size_limit'] ?? 64;
 
@@ -193,7 +193,7 @@ class RequestWatcher extends Watcher
      * @param View $view
      * @return array
      */
-    protected function extractDataFromView($view): array
+    protected function extractDataFromView($view)
     {
         return collect($view->getData())->map(function ($value) {
             if ($value instanceof Model) {

@@ -20,7 +20,7 @@ class ExceptionWatcher extends Watcher
      * @param  Application  $app
      * @return void
      */
-    public function register($app): void
+    public function register($app)
     {
         $app['events']->listen(MessageLogged::class, [$this, 'recordException']);
     }
@@ -32,7 +32,7 @@ class ExceptionWatcher extends Watcher
      * @return void
      * @throws ReflectionException
      */
-    public function recordException(MessageLogged $event): void
+    public function recordException(MessageLogged $event)
     {
         if (! Profiler::isRecording() || $this->shouldIgnore($event)) {
             return;
@@ -63,7 +63,7 @@ class ExceptionWatcher extends Watcher
      * @return array
      * @throws ReflectionException
      */
-    protected function tags($event): array
+    protected function tags($event)
     {
         return array_merge(ExtractTags::from($event->context['exception'])->toArray(),
             $event->context['profiler'] ?? []
@@ -76,7 +76,7 @@ class ExceptionWatcher extends Watcher
      * @param  mixed  $event
      * @return bool
      */
-    private function shouldIgnore($event): bool
+    private function shouldIgnore($event)
     {
         return ! isset($event->context['exception']) || ! $event->context['exception'] instanceof Exception;
     }

@@ -39,7 +39,7 @@ class DumpWatcher extends Watcher
      * @param  Application  $app
      * @return void
      */
-    public function register($app): void
+    public function register($app)
     {
         if (! $this->cache->get('profiler:dump-watcher')) {
             return;
@@ -61,7 +61,7 @@ class DumpWatcher extends Watcher
      * @param  string  $dump
      * @return void
      */
-    public function recordDump($dump): void
+    public function recordDump($dump)
     {
         Profiler::recordDump(
             IncomingDumpEntry::make(['dump' => $dump])

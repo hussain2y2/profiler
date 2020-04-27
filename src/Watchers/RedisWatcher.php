@@ -15,7 +15,7 @@ class RedisWatcher extends Watcher
      * @param  Application  $app
      * @return void
      */
-    public function register($app): void
+    public function register($app)
     {
         $app['events']->listen(CommandExecuted::class, [$this, 'recordCommand']);
 
@@ -32,7 +32,7 @@ class RedisWatcher extends Watcher
      * @param CommandExecuted $event
      * @return void
      */
-    public function recordCommand(CommandExecuted $event): void
+    public function recordCommand(CommandExecuted $event)
     {
         if (! Profiler::isRecording() || $this->shouldIgnore($event)) {
             return;
@@ -52,7 +52,7 @@ class RedisWatcher extends Watcher
      * @param  array  $parameters
      * @return string
      */
-    private function formatCommand($command, $parameters): string
+    private function formatCommand($command, $parameters)
     {
         $parameters = collect($parameters)->map(function ($parameter) {
             if (is_array($parameter)) {
@@ -73,7 +73,7 @@ class RedisWatcher extends Watcher
      * @param  mixed  $event
      * @return bool
      */
-    private function shouldIgnore($event): bool
+    private function shouldIgnore($event)
     {
         return in_array($event->command, [
             'pipeline', 'transaction',

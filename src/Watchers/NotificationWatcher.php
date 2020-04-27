@@ -21,7 +21,7 @@ class NotificationWatcher extends Watcher
      * @param  Application  $app
      * @return void
      */
-    public function register($app): void
+    public function register($app)
     {
         $app['events']->listen(NotificationSent::class, [$this, 'recordNotification']);
     }
@@ -31,8 +31,9 @@ class NotificationWatcher extends Watcher
      *
      * @param NotificationSent $event
      * @return void
+     * @throws ReflectionException
      */
-    public function recordNotification(NotificationSent $event): void
+    public function recordNotification(NotificationSent $event)
     {
         if (! Profiler::isRecording()) {
             return;
@@ -67,7 +68,7 @@ class NotificationWatcher extends Watcher
      * @param  mixed  $notifiable
      * @return string
      */
-    private function formatNotifiable($notifiable): string
+    private function formatNotifiable($notifiable)
     {
         if ($notifiable instanceof Model) {
             return FormatModel::given($notifiable);

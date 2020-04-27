@@ -21,7 +21,7 @@ class GateWatcher extends Watcher
      * @param  Application  $app
      * @return void
      */
-    public function register($app): void
+    public function register($app)
     {
         Gate::after([$this, 'recordGateCheck']);
     }
@@ -60,7 +60,7 @@ class GateWatcher extends Watcher
      * @param  string  $ability
      * @return bool
      */
-    private function shouldIgnore($ability): bool
+    private function shouldIgnore($ability)
     {
         return Str::is($this->options['ignore_abilities'] ?? [], $ability);
     }
@@ -71,7 +71,7 @@ class GateWatcher extends Watcher
      * @param  array  $arguments
      * @return array
      */
-    private function formatArguments($arguments): array
+    private function formatArguments($arguments)
     {
         return collect($arguments)->map(function ($argument) {
             return $argument instanceof Model ? FormatModel::given($argument) : $argument;

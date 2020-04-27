@@ -15,7 +15,7 @@ class CommandWatcher extends Watcher
      * @param  Application  $app
      * @return void
      */
-    public function register($app): void
+    public function register($app)
     {
         $app['events']->listen(CommandFinished::class, [$this, 'recordCommand']);
     }
@@ -26,7 +26,7 @@ class CommandWatcher extends Watcher
      * @param CommandFinished $event
      * @return void
      */
-    public function recordCommand(CommandFinished $event): void
+    public function recordCommand(CommandFinished $event)
     {
         if (! Profiler::isRecording() || $this->shouldIgnore($event)) {
             return;
@@ -46,7 +46,7 @@ class CommandWatcher extends Watcher
      * @param  mixed  $event
      * @return bool
      */
-    private function shouldIgnore($event): bool
+    private function shouldIgnore($event)
     {
         return in_array($event->command, array_merge($this->options['ignore'] ?? [], [
             'schedule:run',

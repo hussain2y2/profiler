@@ -23,7 +23,7 @@ class EventWatcher extends Watcher
      * @param  Application  $app
      * @return void
      */
-    public function register($app): void
+    public function register($app)
     {
         $app['events']->listen('*', [$this, 'recordEvent']);
     }
@@ -36,7 +36,7 @@ class EventWatcher extends Watcher
      * @return void
      * @throws ReflectionException
      */
-    public function recordEvent($eventName, $payload): void
+    public function recordEvent($eventName, $payload)
     {
         if (! Profiler::isRecording() || $this->shouldIgnore($eventName)) {
             return;
@@ -62,7 +62,7 @@ class EventWatcher extends Watcher
      * @return array
      * @throws ReflectionException
      */
-    protected function extractPayload($eventName, $payload): array
+    protected function extractPayload($eventName, $payload)
     {
         if (isset($payload[0]) && is_object($payload[0] && class_exists($eventName))) {
             return ExtractProperties::from($payload[0]);
@@ -82,7 +82,7 @@ class EventWatcher extends Watcher
      * @param  string  $eventName
      * @return array
      */
-    protected function formatListeners($eventName): array
+    protected function formatListeners($eventName)
     {
         return collect(app('events')->getListeners($eventName))
             ->map(function ($listener) {
@@ -116,7 +116,7 @@ class EventWatcher extends Watcher
      * @param  string  $eventName
      * @return bool
      */
-    protected function shouldIgnore($eventName): bool
+    protected function shouldIgnore($eventName)
     {
         return $this->eventIsIgnored($eventName) ||
             (Profiler::$ignoreFrameworkEvents && $this->eventIsFiredByTheFramework($eventName));
@@ -128,7 +128,7 @@ class EventWatcher extends Watcher
      * @param  string  $eventName
      * @return bool
      */
-    protected function eventIsFiredByTheFramework($eventName): bool
+    protected function eventIsFiredByTheFramework($eventName)
     {
         return Str::is(
             ['Illuminate\*', 'eloquent*', 'bootstrapped*', 'bootstrapping*', 'creating*', 'composing*'],
@@ -142,7 +142,7 @@ class EventWatcher extends Watcher
      * @param  string  $eventName
      * @return bool
      */
-    protected function eventIsIgnored($eventName): bool
+    protected function eventIsIgnored($eventName)
     {
         return Str::is($this->options['ignore'] ?? [], $eventName);
     }

@@ -16,7 +16,7 @@ class ModelWatcher extends Watcher
      * @param  Application  $app
      * @return void
      */
-    public function register($app): void
+    public function register($app)
     {
         $app['events']->listen($this->options['events'] ?? 'eloquent.*', [$this, 'recordAction']);
     }
@@ -28,7 +28,7 @@ class ModelWatcher extends Watcher
      * @param  array  $data
      * @return void
      */
-    public function recordAction($event, $data): void
+    public function recordAction($event, $data)
     {
         if (! Profiler::isRecording() || ! $this->shouldRecord($event)) {
             return;
@@ -64,7 +64,7 @@ class ModelWatcher extends Watcher
      * @param  string  $eventName
      * @return bool
      */
-    private function shouldRecord($eventName): bool
+    private function shouldRecord($eventName)
     {
         return Str::is([
             '*created*', '*updated*', '*restored*', '*deleted*',

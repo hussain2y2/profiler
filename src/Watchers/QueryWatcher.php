@@ -17,7 +17,7 @@ class QueryWatcher extends Watcher
      * @param  Application  $app
      * @return void
      */
-    public function register($app): void
+    public function register($app)
     {
         $app['events']->listen(QueryExecuted::class, [$this, 'recordQuery']);
     }
@@ -28,7 +28,7 @@ class QueryWatcher extends Watcher
      * @param QueryExecuted $event
      * @return void
      */
-    public function recordQuery(QueryExecuted $event): void
+    public function recordQuery(QueryExecuted $event)
     {
         if (! Profiler::isRecording()) {
             return;
@@ -56,7 +56,7 @@ class QueryWatcher extends Watcher
      * @param QueryExecuted $event
      * @return array
      */
-    protected function tags($event): array
+    protected function tags($event)
     {
         return isset($this->options['slow']) && $event->time >= $this->options['slow'] ? ['slow'] : [];
     }
@@ -67,7 +67,7 @@ class QueryWatcher extends Watcher
      * @param QueryExecuted $event
      * @return string
      */
-    public function familyHash($event): string
+    public function familyHash($event)
     {
         return md5($event->sql);
     }
@@ -78,7 +78,7 @@ class QueryWatcher extends Watcher
      * @param QueryExecuted $event
      * @return array
      */
-    protected function formatBindings($event): array
+    protected function formatBindings($event)
     {
         return $event->connection->prepareBindings($event->bindings);
     }
@@ -89,7 +89,7 @@ class QueryWatcher extends Watcher
      * @param QueryExecuted $event
      * @return string
      */
-    public function replaceBindings($event): string
+    public function replaceBindings($event)
     {
         $sql = $event->sql;
 

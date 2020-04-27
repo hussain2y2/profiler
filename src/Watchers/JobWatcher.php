@@ -23,7 +23,7 @@ class JobWatcher extends Watcher
      * @param  Application  $app
      * @return void
      */
-    public function register($app): void
+    public function register($app)
     {
         Queue::createPayloadUsing(function ($connection, $queue, $payload) {
             return ['profiler_uuid' => optional($this->recordJob($connection, $queue, $payload))->uuid];
@@ -64,7 +64,7 @@ class JobWatcher extends Watcher
      * @param JobProcessed $event
      * @return void
      */
-    public function recordProcessedJob(JobProcessed $event): void
+    public function recordProcessedJob(JobProcessed $event)
     {
         if (! Profiler::isRecording()) {
             return;
@@ -87,7 +87,7 @@ class JobWatcher extends Watcher
      * @param JobFailed $event
      * @return void
      */
-    public function recordFailedJob(JobFailed $event): void
+    public function recordFailedJob(JobFailed $event)
     {
         if (! Profiler::isRecording()) {
             return;
@@ -121,7 +121,7 @@ class JobWatcher extends Watcher
      * @param  array  $data
      * @return array
      */
-    protected function defaultJobData($connection, $queue, array $payload, array $data): array
+    protected function defaultJobData($connection, $queue, array $payload, array $data)
     {
         return [
             'connection' => $connection,
@@ -157,7 +157,7 @@ class JobWatcher extends Watcher
      * @param  array  $payload
      * @return array
      */
-    protected function tags(array $payload): array
+    protected function tags(array $payload)
     {
         if (! isset($payload['data']['command'])) {
             return [];

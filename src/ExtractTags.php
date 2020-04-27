@@ -65,7 +65,7 @@ class ExtractTags
      * @param array $data
      * @return array
      */
-    public static function fromArray(array $data): array
+    public static function fromArray(array $data)
     {
         $models = collect($data)->map(static function ($value) {
             if ($value instanceof Model) {
@@ -86,7 +86,7 @@ class ExtractTags
      * @param array $targets
      * @return array|mixed
      */
-    protected static function explicitTags(array $targets): array
+    protected static function explicitTags(array $targets)
     {
         return collect($targets)->map(static function ($target) {
             return method_exists($target, 'tags') ? $target->tags() : [];
@@ -100,7 +100,7 @@ class ExtractTags
      * @return Collection
      * @throws ReflectionException
      */
-    protected static function modelsFor(array $targets): Collection
+    protected static function modelsFor(array $targets)
     {
         $models = [];
 
@@ -143,7 +143,7 @@ class ExtractTags
      * @param $job
      * @return array
      */
-    protected static function tagsForListener($job): ?array
+    protected static function tagsForListener($job)
     {
         try {
             return collect(
@@ -184,7 +184,7 @@ class ExtractTags
      * @param $job
      * @return array|stdClass[]
      */
-    protected static function targetsFor($job): ?array
+    protected static function targetsFor($job)
     {
         switch (true) {
             case $job instanceof BroadcastEvent:
