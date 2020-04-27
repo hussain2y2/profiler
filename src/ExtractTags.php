@@ -36,7 +36,7 @@ class ExtractTags
 
         return static::modelsFor([$target])->map(static function ($model) {
             return FormatModel::given($model);
-        });
+        })->all();
     }
 
     /**
