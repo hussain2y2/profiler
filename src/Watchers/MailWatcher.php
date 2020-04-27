@@ -86,11 +86,12 @@ class MailWatcher extends Watcher
      */
     private function tags($message, $data): array
     {
+        $profiler = (array) $data['__profiler'];
         return array_merge(
             array_keys($message->getTo() ?: []),
             array_keys($message->getCc() ?: []),
             array_keys($message->getBcc() ?: []),
-            $data['__profiler'] ?? []
+            $profiler ?? []
         );
     }
 }
