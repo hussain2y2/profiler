@@ -131,7 +131,7 @@ class Profiler
      * @param Application $app
      * @return void
      */
-    public static function start(Application $app): void
+    public static function start(Application $app)
     {
         if (! config('profiler.enabled')) {
             return;
@@ -154,7 +154,7 @@ class Profiler
      * @param Application $app
      * @return bool
      */
-    protected static function runningApprovedArtisanCommand(Application $app): bool
+    protected static function runningApprovedArtisanCommand(Application $app)
     {
         return $app->runningInConsole() && !in_array($_SERVER['argv'][1] ?? null, array_merge([
                 // 'migrate',
@@ -178,7 +178,7 @@ class Profiler
      * @param Application $app
      * @return bool
      */
-    protected static function handlingApprovedRequest(Application $app): bool
+    protected static function handlingApprovedRequest(Application $app)
     {
         return ! $app->runningInConsole() && ! $app['request']->is(
                 array_merge([
@@ -198,7 +198,7 @@ class Profiler
      * @return void
      * @throws Exception
      */
-    public static function startRecording(): void
+    public static function startRecording()
     {
         app(EntriesRepository::class)->loadMonitoredTags();
 
@@ -210,7 +210,7 @@ class Profiler
      *
      * @return void
      */
-    public static function stopRecording(): void
+    public static function stopRecording()
     {
         static::$shouldRecord = false;
     }
@@ -221,7 +221,7 @@ class Profiler
      * @param callable $callback
      * @return void
      */
-    public static function withoutRecording($callback): void
+    public static function withoutRecording($callback)
     {
         $shouldRecord = static::$shouldRecord;
 
@@ -237,7 +237,7 @@ class Profiler
      *
      * @return bool
      */
-    public static function isRecording(): bool
+    public static function isRecording()
     {
         return static::$shouldRecord;
     }
@@ -249,7 +249,7 @@ class Profiler
      * @param IncomingEntry $entry
      * @return void
      */
-    protected static function record(string $type, IncomingEntry $entry): void
+    protected static function record(string $type, IncomingEntry $entry)
     {
         if (!static::isRecording()) {
             return;
@@ -281,7 +281,7 @@ class Profiler
      * @param EntryUpdate $update
      * @return void
      */
-    public static function recordUpdate(EntryUpdate $update): void
+    public static function recordUpdate(EntryUpdate $update)
     {
         if (static::$shouldRecord) {
             static::$updatesQueue[] = $update;
@@ -294,7 +294,7 @@ class Profiler
      * @param IncomingEntry $entry
      * @return void
      */
-    public static function recordCache(IncomingEntry $entry): void
+    public static function recordCache(IncomingEntry $entry)
     {
         static::record(EntryType::CACHE, $entry);
     }
@@ -305,7 +305,7 @@ class Profiler
      * @param IncomingEntry $entry
      * @return void
      */
-    public static function recordCommand(IncomingEntry $entry): void
+    public static function recordCommand(IncomingEntry $entry)
     {
         static::record(EntryType::COMMAND, $entry);
     }
@@ -316,7 +316,7 @@ class Profiler
      * @param IncomingEntry $entry
      * @return void
      */
-    public static function recordDump(IncomingEntry $entry): void
+    public static function recordDump(IncomingEntry $entry)
     {
         static::record(EntryType::DUMP, $entry);
     }
@@ -327,7 +327,7 @@ class Profiler
      * @param IncomingEntry $entry
      * @return void
      */
-    public static function recordEvent(IncomingEntry $entry): void
+    public static function recordEvent(IncomingEntry $entry)
     {
         static::record(EntryType::EVENT, $entry);
     }
@@ -338,7 +338,7 @@ class Profiler
      * @param IncomingEntry $entry
      * @return void
      */
-    public static function recordException(IncomingEntry $entry): void
+    public static function recordException(IncomingEntry $entry)
     {
         static::record(EntryType::EXCEPTION, $entry);
     }
@@ -349,7 +349,7 @@ class Profiler
      * @param IncomingEntry $entry
      * @return void
      */
-    public static function recordGate(IncomingEntry $entry): void
+    public static function recordGate(IncomingEntry $entry)
     {
         static::record(EntryType::GATE, $entry);
     }
@@ -360,7 +360,7 @@ class Profiler
      * @param IncomingEntry $entry
      * @return void
      */
-    public static function recordJob($entry): void
+    public static function recordJob($entry)
     {
         static::record(EntryType::JOB, $entry);
     }
@@ -371,7 +371,7 @@ class Profiler
      * @param IncomingEntry $entry
      * @return void
      */
-    public static function recordLog(IncomingEntry $entry): void
+    public static function recordLog(IncomingEntry $entry)
     {
         static::record(EntryType::LOG, $entry);
     }
@@ -382,7 +382,7 @@ class Profiler
      * @param IncomingEntry $entry
      * @return void
      */
-    public static function recordMail(IncomingEntry $entry): void
+    public static function recordMail(IncomingEntry $entry)
     {
         static::record(EntryType::MAIL, $entry);
     }
@@ -393,7 +393,7 @@ class Profiler
      * @param IncomingEntry $entry
      * @return void
      */
-    public static function recordNotification($entry): void
+    public static function recordNotification($entry)
     {
         static::record(EntryType::NOTIFICATION, $entry);
     }
@@ -404,7 +404,7 @@ class Profiler
      * @param IncomingEntry $entry
      * @return void
      */
-    public static function recordQuery(IncomingEntry $entry): void
+    public static function recordQuery(IncomingEntry $entry)
     {
         static::record(EntryType::QUERY, $entry);
     }
@@ -415,7 +415,7 @@ class Profiler
      * @param IncomingEntry $entry
      * @return void
      */
-    public static function recordModelEvent(IncomingEntry $entry): void
+    public static function recordModelEvent(IncomingEntry $entry)
     {
         static::record(EntryType::MODEL, $entry);
     }
@@ -426,7 +426,7 @@ class Profiler
      * @param IncomingEntry $entry
      * @return void
      */
-    public static function recordRedis(IncomingEntry $entry): void
+    public static function recordRedis(IncomingEntry $entry)
     {
         static::record(EntryType::REDIS, $entry);
     }
@@ -437,7 +437,7 @@ class Profiler
      * @param IncomingEntry $entry
      * @return void
      */
-    public static function recordRequest(IncomingEntry $entry): void
+    public static function recordRequest(IncomingEntry $entry)
     {
         static::record(EntryType::REQUEST, $entry);
     }
@@ -448,7 +448,7 @@ class Profiler
      * @param IncomingEntry $entry
      * @return void
      */
-    public static function recordScheduledCommand(IncomingEntry $entry): void
+    public static function recordScheduledCommand(IncomingEntry $entry)
     {
         static::record(EntryType::SCHEDULED_TASK, $entry);
     }
@@ -459,7 +459,7 @@ class Profiler
      * @param IncomingEntry $entry
      * @return void
      */
-    public static function recordView(IncomingEntry $entry): void
+    public static function recordView(IncomingEntry $entry)
     {
         static::record(EntryType::VIEW, $entry);
     }
@@ -469,7 +469,7 @@ class Profiler
      *
      * @return static
      */
-    public static function flushEntries(): Profiler
+    public static function flushEntries()
     {
         static::$entriesQueue = [];
 
@@ -483,7 +483,7 @@ class Profiler
      * @param array $tags
      * @return void
      */
-    public static function catch($e, $tags = []): void
+    public static function catch($e, $tags = [])
     {
         if ($e instanceof Throwable && ! $e instanceof Exception) {
             $e = new FatalThrowableError($e);
@@ -498,7 +498,7 @@ class Profiler
      * @param Closure $callback
      * @return static
      */
-    public static function filter(Closure $callback): Profiler
+    public static function filter(Closure $callback)
     {
         static::$filterUsing[] = $callback;
 
@@ -511,7 +511,7 @@ class Profiler
      * @param Closure $callback
      * @return static
      */
-    public static function filterBatch(Closure $callback): Profiler
+    public static function filterBatch(Closure $callback)
     {
         static::$filterBatchUsing[] = $callback;
 
@@ -524,7 +524,7 @@ class Profiler
      * @param Closure $callback
      * @return static
      */
-    public static function afterRecording(Closure $callback): Profiler
+    public static function afterRecording(Closure $callback)
     {
         static::$afterRecordingHook = $callback;
 
@@ -537,7 +537,7 @@ class Profiler
      * @param Closure $callback
      * @return static
      */
-    public static function tag(Closure $callback): Profiler
+    public static function tag(Closure $callback)
     {
         static::$tagUsing = $callback;
 
@@ -550,7 +550,7 @@ class Profiler
      * @param EntriesRepository $storage
      * @return void
      */
-    public static function store(EntriesRepository $storage): void
+    public static function store(EntriesRepository $storage)
     {
         if (empty(static::$entriesQueue) && empty(static::$updatesQueue)) {
             return;
@@ -562,9 +562,16 @@ class Profiler
 
         try {
             $batchId = Str::orderedUuid()->toString();
+            $insert_records = static::collectEntries($batchId);
+            $update_records = static::collectUpdates($batchId);
 
-            $storage->store(static::collectEntries($batchId));
-            $storage->update(static::collectUpdates($batchId));
+            if ($insert_records->count()) {
+                $storage->store($insert_records);
+            }
+
+            if ($update_records->count()) {
+                $storage->update($update_records);
+            }
 
             if ($storage instanceof TerminableRepository) {
                 $storage->terminate();
@@ -583,7 +590,7 @@ class Profiler
      * @param string $batchId
      * @return Collection
      */
-    protected static function collectEntries(string $batchId): Collection
+    protected static function collectEntries(string $batchId)
     {
         return collect(static::$entriesQueue)
             ->each(static function ($entry) use ($batchId) {
@@ -601,7 +608,7 @@ class Profiler
      * @param string $batchId
      * @return Collection
      */
-    protected static function collectUpdates(string $batchId): Collection
+    protected static function collectUpdates(string $batchId)
     {
         return collect(static::$updatesQueue)
             ->each(static function ($entry) use ($batchId) {
@@ -610,12 +617,28 @@ class Profiler
     }
 
     /**
+     * Hide the given request header.
+     *
+     * @param array $headers
+     * @return static
+     */
+    public static function hideRequestHeaders(array $headers)
+    {
+        static::$hiddenRequestHeaders = array_merge(
+            static::$hiddenRequestHeaders,
+            $headers
+        );
+
+        return new static;
+    }
+
+    /**
      * Hide the given request parameters.
      *
      * @param array $attributes
-     * @return Profiler
+     * @return static
      */
-    public static function hideRequestParameters(array $attributes): Profiler
+    public static function hideRequestParameters(array $attributes)
     {
         static::$hiddenRequestParameters = array_merge(
             static::$hiddenRequestParameters,
@@ -629,9 +652,9 @@ class Profiler
      * Hide the given response parameters.
      *
      * @param array $attributes
-     * @return Profiler
+     * @return static
      */
-    public static function hideResponseParameters(array $attributes): Profiler
+    public static function hideResponseParameters(array $attributes)
     {
         static::$hiddenResponseParameters = array_merge(
             static::$hiddenResponseParameters,
@@ -644,9 +667,9 @@ class Profiler
     /**
      * Specifies that Profiler should record events fired by Laravel.
      *
-     * @return Profiler
+     * @return static
      */
-    public static function recordFrameworkEvents(): Profiler
+    public static function recordFrameworkEvents()
     {
         static::$ignoreFrameworkEvents = false;
 
@@ -656,9 +679,9 @@ class Profiler
     /**
      * Specifies that Profiler should use the dark theme.
      *
-     * @return Profiler
+     * @return static
      */
-    public static function night(): Profiler
+    public static function night()
     {
         static::$useDarkTheme = true;
 
@@ -671,12 +694,12 @@ class Profiler
      * @return array
      * @throws Exception
      */
-    public static function scriptVariables(): array
+    public static function scriptVariables()
     {
         return [
             'path' => config('profiler.path'),
             'timezone' => config('app.timezone'),
-            'recording' => !cache('profiler:pause-recording'),
+            'recording' => ! cache('profiler:pause-recording'),
         ];
     }
 
@@ -685,7 +708,7 @@ class Profiler
      *
      * @return Profiler
      */
-    public static function ignoreMigrations(): Profiler
+    public static function ignoreMigrations()
     {
         static::$runsMigrations = false;
 
@@ -698,7 +721,7 @@ class Profiler
      * @return bool
      * @throws RuntimeException
      */
-    public static function assetsAreCurrent(): bool
+    public static function assetsAreCurrent()
     {
         $publishedPath = public_path('vendor/profiler/mix-manifest.json');
 

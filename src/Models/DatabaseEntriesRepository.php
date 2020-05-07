@@ -3,7 +3,6 @@
 namespace Isotopes\Profiler\Models;
 
 use DateTimeInterface;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Isotopes\Profiler\Contracts\ClearableRepository;
@@ -14,6 +13,7 @@ use Isotopes\Profiler\Entry\EntryResult;
 use Isotopes\Profiler\Entry\EntryType;
 use Isotopes\Profiler\Entry\EntryUpdate;
 use Isotopes\Profiler\Entry\IncomingEntry;
+use Illuminate\Database\Query\Builder;
 use Throwable;
 
 /**
@@ -100,16 +100,15 @@ class DatabaseEntriesRepository implements EntriesRepository, ClearableRepositor
      */
     public function get($type, EntryQueryOptions $options)
     {
-
         return EntryModel::on($this->connection)
             ->withProfilerOptions($type, $options)
             ->take($options->limit)
             ->orderByDesc('sequence')
-            ->get()
-            ->reject(static function (EntryModel $entry) {
+            ->orderBy('created_at', 'desc')
+            ->get()->reject(static function ($entry) {
                 return !is_array($entry->content);
             })
-            ->map(static function (EntryModel $entry) {
+            ->map(static function ($entry) {
                 return new EntryResult(
                     $entry->uuid,
                     $entry->sequence,
@@ -130,7 +129,7 @@ class DatabaseEntriesRepository implements EntriesRepository, ClearableRepositor
      * @param Collection|IncomingEntry[] $entries
      * @return void
      */
-    public function store(Collection $entries): void
+    public function store(Collection $entries)
     {
         if ($entries->isEmpty()) {
             return;
@@ -159,7 +158,7 @@ class DatabaseEntriesRepository implements EntriesRepository, ClearableRepositor
      * @param Collection|EntryUpdate[] $updates
      * @return void
      */
-    public function update(Collection $updates): void
+    public function update(Collection $updates)
     {
         foreach ($updates as $update) {
             $entry = $this->collection('profiler_entries')
@@ -189,7 +188,7 @@ class DatabaseEntriesRepository implements EntriesRepository, ClearableRepositor
      *
      * @return void
      */
-    public function loadMonitoredTags(): void
+    public function loadMonitoredTags()
     {
         try {
             $this->monitoredTags = $this->monitoring();
@@ -204,7 +203,7 @@ class DatabaseEntriesRepository implements EntriesRepository, ClearableRepositor
      * @param array $tags
      * @return bool
      */
-    public function isMonitoring(array $tags): bool
+    public function isMonitoring(array $tags)
     {
         if ($this->monitoredTags === null) {
             $this->loadMonitoredTags();
@@ -218,7 +217,7 @@ class DatabaseEntriesRepository implements EntriesRepository, ClearableRepositor
      *
      * @return array
      */
-    public function monitoring(): array
+    public function monitoring()
     {
         return $this->collection('profiler_monitoring')->pluck('tag')->all();
     }
@@ -229,7 +228,7 @@ class DatabaseEntriesRepository implements EntriesRepository, ClearableRepositor
      * @param array $tags
      * @return void
      */
-    public function monitor(array $tags): void
+    public function monitor(array $tags)
     {
         $tags = array_diff($tags, $this->monitoring());
 
@@ -250,7 +249,7 @@ class DatabaseEntriesRepository implements EntriesRepository, ClearableRepositor
      * @param array $tags
      * @return void
      */
-    public function stopMonitoring(array $tags): void
+    public function stopMonitoring(array $tags)
     {
         $this->collection('profiler_monitoring')->whereIn('tag', $tags)->delete();
     }
@@ -293,7 +292,7 @@ class DatabaseEntriesRepository implements EntriesRepository, ClearableRepositor
      * @param $collection
      * @return Builder
      */
-    protected function collection($collection): Builder
+    protected function collection($collection)
     {
         return DB::connection($this->connection)->table($collection);
     }
@@ -304,7 +303,7 @@ class DatabaseEntriesRepository implements EntriesRepository, ClearableRepositor
      * @param IncomingEntry $entry
      * @return int
      */
-    protected function countExceptionOccurrences(IncomingEntry $entry): int
+    protected function countExceptionOccurrences(IncomingEntry $entry)
     {
         return $this->collection('profiler_entries')
             ->where('type', EntryType::EXCEPTION)
@@ -339,26 +338,6 @@ class DatabaseEntriesRepository implements EntriesRepository, ClearableRepositor
         });
 
         $this->storeTags($exceptions->pluck('tags', 'uuid'));
-//        $collection->chunk($this->chunkSize)->each(static function($chunked) {
-//            $this->collection('profiler_entries')
-//                ->insert($chunked->map(function ($exception) {
-//                    $occurrences = $this->countExceptionOccurrences($exception);
-//
-//                    $this->collection('profiler_entries')
-//                        ->where('type', EntryType::EXCEPTION)
-//                        ->where('family_hash', $exception->familyHash())
-//                        ->update(['should_display_on_index' => false]);
-//
-//                    return array_merge($exception->toArray(), [
-//                        'family_hash'   => $exception->familyHash(),
-//                        'content'       => json_encode(array_merge(
-//                            $exception->content, ['occurrences' => $occurrences + 1]
-//                        )),
-//                    ]);
-//                })->toArray());
-//        });
-//
-//        $this->storeTags($collection->pluck('tags', 'uuid'));
     }
 
     /**
@@ -367,19 +346,34 @@ class DatabaseEntriesRepository implements EntriesRepository, ClearableRepositor
      * @param Collection $results
      * @return void
      */
-    protected function storeTags(Collection $results): void
+    protected function storeTags(Collection $results)
     {
-        $results->chunk($this->chunkSize)->each(function ($chunked) {
-            $this->collection('profiler_entries_tags')
-                ->insert($chunked->flatMap(static function ($tags, $uuid) {
-                return collect($tags)->map(static function ($tag) use ($uuid) {
-                    return [
-                        'entry_uuid' => $uuid,
-                        'tag' => $tag,
-                    ];
-                });
-            })->all());
-        });
+        if ($results->count()) {
+            $results->chunk($this->chunkSize)->each(function ($chunked) {
+                $builder = $this->collection('profiler_entries_tags');
+                foreach ($chunked as $uuid => $tags) {
+                    if (count($tags)) {
+                        $collection = collect($tags)->map(static function ($tag) use ($uuid) {
+                            return [
+                                'entry_uuid' => $uuid,
+                                'tag' => $tag,
+                            ];
+                        })->all();
+
+                        $builder->insert($collection);
+                    }
+                }
+
+                /*$this->collection('profiler_entries_tags')->insert($chunked->flatMap(static function ($tags, $uuid) {
+                    return collect($tags)->map(static function ($tag) use ($uuid) {
+                        return [
+                            'entry_uuid' => $uuid,
+                            'tag' => $tag,
+                        ];
+                    });
+                })->all());*/
+            });
+        }
     }
 
     /**
@@ -388,7 +382,7 @@ class DatabaseEntriesRepository implements EntriesRepository, ClearableRepositor
      * @param EntryUpdate $entry
      * @return void
      */
-    protected function updateTags(EntryUpdate $entry): void
+    protected function updateTags(EntryUpdate $entry)
     {
         if (!empty($entry->tagsChanges['added'])) {
             $this->collection('profiler_entries_tags')->insert(

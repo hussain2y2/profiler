@@ -47,17 +47,15 @@ class CreateProfilerEntriesTable extends Migration {
             $table->uuid('uuid');
             $table->uuid('batch_id');
             $table->string('family_hash')->nullable()->index();
-            $table->boolean('should_display_on_index')->default(true);
             $table->string('type', 20);
             $table->longText('content');
             $table->dateTime('created_at')->nullable();
 
             $table->unique('uuid');
             $table->index('batch_id');
-            $table->index(['type', 'should_display_on_index']);
         });
 
-        $this->schema->create('profiler_entries_tags', function (Blueprint $table) {
+        $this->schema->create('profiler_entries_tags', static function (Blueprint $table) {
             $table->uuid('entry_uuid');
             $table->string('tag');
 
